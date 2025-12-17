@@ -1,146 +1,278 @@
-# QuizMaster - Interactive Quiz Application
+# 🎯 QuizMaster - Interactive Quiz Application
 
-A responsive web-based quiz application that allows users to test their knowledge across various topics using the Open Trivia Database API.
+A fully responsive, single-page web application that allows users to test their knowledge across various topics using questions from the Open Trivia Database API.
 
-## 🎯 Project Overview
+**Live Demo:** [Add your deployed link here]  
+**Repository:** https://github.com/Rayo-Johnson/quiz-app
 
-QuizMaster is a frontend capstone project built with HTML, CSS, and JavaScript. Users can select quiz categories, difficulty levels, and number of questions, then take interactive quizzes and track their performance over time.
+---
+
+## 📸 Screenshots
+
+### Landing Page
+![Landing Page](assets/designs/landing-desktop.png)
+*Quiz configuration screen with category, difficulty, and question count selection*
+
+### Quiz Screen
+![Quiz Screen](assets/designs/quiz-desktop.png)
+*Interactive quiz interface with progress tracking and instant feedback*
+
+### Results Screen
+![Results Screen](assets/designs/results-desktop.png)
+*Final score display with detailed statistics and retry options*
+
+---
 
 ## ✨ Features
 
-### Core Features
-- 📚 Multiple quiz categories (Science, History, Sports, Entertainment, etc.)
-- 🎚️ Three difficulty levels (Easy, Medium, Hard)
-- 📊 Real-time score tracking
-- ✅ Instant feedback on answers
-- 📱 Fully responsive design for all devices
+### Core Functionality
+- ✅ **Multiple Quiz Categories** - Choose from 8 different topics including Science, History, Sports, and Entertainment
+- ✅ **Three Difficulty Levels** - Easy, Medium, and Hard options to match your skill level
+- ✅ **Customizable Quiz Length** - Select 5, 10, or 15 questions per quiz
+- ✅ **Real-time Score Tracking** - See your score update as you progress through the quiz
+- ✅ **Instant Answer Feedback** - Visual feedback showing correct and incorrect answers
+- ✅ **Progress Indicator** - Dynamic progress bar showing quiz completion status
+- ✅ **Fully Responsive Design** - Seamless experience across desktop, tablet, and mobile devices
 
-### Additional Features (Planned)
-- 🔍 Search functionality for quiz topics
-- 📈 Quiz history and performance tracking
-- 🔄 Option to retake quizzes
-- 💡 Answer explanations and review mode
+### User Experience
+- 🎨 Modern, clean UI with gradient backgrounds and smooth transitions
+- 🔄 Smooth screen transitions and loading states
+- ⚡ Fast API integration with the Open Trivia Database
+- 🎯 Clear visual feedback for all user interactions
+- 📊 Detailed results with percentage, correct/incorrect breakdown
+- 🔁 Easy retry and navigation options
+
+---
 
 ## 🛠️ Technologies Used
 
-- **HTML5** - Structure and content
-- **CSS3 / Tailwind CSS** - Styling and responsive design
-- **JavaScript (ES6+)** - Application logic and interactivity
+- **HTML5** - Semantic markup and structure
+- **CSS3 / Tailwind CSS** - Modern styling via CDN
+- **JavaScript (ES6+)** - Vanilla JavaScript for all functionality
 - **Open Trivia Database API** - Quiz questions and categories
+- **Git & GitHub** - Version control and code hosting
 
-## 📋 API Reference
-
-This project uses the [Open Trivia Database API](https://opentdb.com/)
-
-**Example Endpoints:**
-- Fetch categories: `https://opentdb.com/api_category.php`
-- Fetch questions: `https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple`
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 - A modern web browser (Chrome, Firefox, Safari, Edge)
-- Basic knowledge of HTML, CSS, and JavaScript
+- Internet connection (for Tailwind CSS CDN and API calls)
 
 ### Installation
 
-1. Clone the repository
-```bash
-git clone https://github.com/Rayo-Johnson/quiz-app.git
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Rayo-Johnson/quiz-app.git
+   ```
 
-2. Navigate to the project directory
-```bash
-cd quiz-app
-```
+2. **Navigate to the project directory**
+   ```bash
+   cd quiz-app
+   ```
 
-3. Open `index.html` in your browser or use a local server
-```bash
-# Using Python
-python -m http.server 8000
+3. **Open in browser**
+   
+   **Option A:** Simply double-click `index.html`
+   
+   **Option B:** Use a local server (recommended)
+   ```bash
+   # Using Python
+   python -m http.server 8000
+   
+   # Using Node.js
+   npx http-server
+   ```
 
-# Using Node.js (if you have http-server installed)
-npx http-server
-```
+4. **Visit the application**
+   ```
+   http://localhost:8000
+   ```
 
-4. Visit `http://localhost:8000` in your browser
+---
 
 ## 📁 Project Structure
 
 ```
 quiz-app/
-├── index.html              # Main HTML file
-├── css/
-│   └── styles.css         # Custom styles
-├── js/
-│   ├── app.js             # Main application logic
-│   ├── api.js             # API integration
-│   └── utils.js           # Helper functions
+├── index.html              # Main HTML file with all three screens
+├── app.js                  # Complete JavaScript logic
 ├── assets/
-│   ├── images/            # Images and icons
-│   └── designs/           # Design mockups
+│   └── designs/           # Design mockups and screenshots
 ├── README.md              # Project documentation
 └── .gitignore             # Git ignore file
 ```
 
+---
+
+## 🎮 How to Use
+
+### Starting a Quiz
+
+1. **Select a Category** - Choose from 8 different quiz topics
+2. **Choose Difficulty** - Click Easy, Medium, or Hard
+3. **Pick Question Count** - Select 5, 10, or 15 questions
+4. **Click "Start Quiz"** - The app will fetch questions from the API
+
+### Taking the Quiz
+
+- Read each question carefully
+- Click your answer choice
+- See instant feedback (green = correct, red = incorrect)
+- Automatically move to the next question after 1.5 seconds
+- Track your progress with the score counter and progress bar
+
+### Viewing Results
+
+- See your final score and percentage
+- View correct vs incorrect breakdown
+- Get a performance message based on your score
+- Click "Try Again" to retake with same settings
+- Click "Back to Home" to configure a new quiz
+
+---
+
+## 🔌 API Reference
+
+This project uses the [Open Trivia Database API](https://opentdb.com/)
+
+### Endpoint Used
+```
+GET https://opentdb.com/api.php
+```
+
+### Parameters
+- `amount` - Number of questions (5-50)
+- `category` - Quiz category ID
+- `difficulty` - easy, medium, or hard
+- `type` - multiple (multiple choice questions)
+
+### Example Request
+```
+https://opentdb.com/api.php?amount=10&category=17&difficulty=easy&type=multiple
+```
+
+---
+
 ## 🎨 Design
 
-High-fidelity designs are available in the `/assets/designs/` folder, including:
-- Landing page (category selection)
-- Quiz interface (question display)
-- Results screen (score summary)
+### Color Palette
+- **Primary:** Indigo (#6366f1)
+- **Secondary:** Purple (#a855f7)
+- **Accent:** Pink (#ec4899)
+- **Success:** Green (#15803d)
+- **Error:** Red (#dc2626)
 
-All designs are responsive and optimized for desktop, tablet, and mobile devices.
+### Typography
+- **Font:** System fonts (Segoe UI, Tahoma, Geneva, Verdana, sans-serif)
+- **Headers:** Bold, large sizes for impact
+- **Body:** Regular weight for readability
 
-## 🔄 Current Progress
+---
 
-- [x] Project planning and documentation
-- [x] High-fidelity design mockups
-- [x] GitHub repository setup
-- [ ] HTML structure implementation
-- [ ] CSS styling with Tailwind
-- [ ] JavaScript functionality
-- [ ] API integration
-- [ ] Testing and bug fixes
-- [ ] Deployment
+## ✅ Features Implemented
 
-## 🚧 Roadmap
+- [x] Landing page with quiz configuration
+- [x] Category selection (8 categories)
+- [x] Difficulty selection (3 levels)
+- [x] Question count selection
+- [x] API integration with Open Trivia Database
+- [x] Quiz screen with question display
+- [x] Multiple choice answer selection
+- [x] Answer validation and feedback
+- [x] Progress tracking
+- [x] Score calculation
+- [x] Results screen with statistics
+- [x] Retry functionality
+- [x] Navigation between screens
+- [x] Responsive design (mobile-friendly)
+- [x] Loading states
+- [x] Error handling
+- [x] HTML entity decoding
+- [x] Answer shuffling
 
-### Week 1-2
-- Set up project structure
-- Implement HTML layout
-- Apply Tailwind CSS styling
+---
 
-### Week 3
-- Integrate Open Trivia Database API
-- Build quiz logic and state management
-- Implement score tracking
+## 🔜 Future Enhancements
 
-### Week 4
-- Add quiz history feature
-- Final styling and responsiveness
-- Testing and deployment
+Potential features for future versions:
 
-## 🤝 Contributing
+- [ ] Quiz history saved in localStorage
+- [ ] Performance tracking over time
+- [ ] User accounts and profiles
+- [ ] Leaderboard functionality
+- [ ] Social sharing of scores
+- [ ] More question types (True/False, Fill in the blank)
+- [ ] Timed quiz mode
+- [ ] Review mode with answer explanations
+- [ ] Dark mode toggle
+- [ ] Accessibility improvements (ARIA labels, keyboard navigation)
 
-This is a student capstone project, but feedback and suggestions are welcome! Feel free to open an issue or submit a pull request.
+---
+
+## 🐛 Known Issues
+
+- None currently! If you find any bugs, please [open an issue](https://github.com/Rayo-Johnson/quiz-app/issues).
+
+---
+
+## 📝 Development Notes
+
+### Challenges Overcome
+
+1. **API Integration** - Successfully integrated with Open Trivia DB, handling JSON responses and error cases
+2. **HTML Entity Decoding** - Implemented proper decoding for special characters in questions
+3. **Answer Shuffling** - Used Fisher-Yates algorithm to randomize answer order
+4. **State Management** - Built custom state management without frameworks
+5. **Responsive Design** - Ensured great UX across all device sizes
+
+### Learning Outcomes
+
+- Real-world API integration experience
+- Async/await and Promise handling
+- DOM manipulation best practices
+- Responsive design principles with Tailwind CSS
+- Git workflow and version control
+- Project planning and execution
+
+---
 
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
 
+---
+
 ## 👤 Author
 
-**Motunrayo Johnson**
+**Rayo Johnson**
 - GitHub: [@Rayo-Johnson](https://github.com/Rayo-Johnson)
-
-## 🙏 Acknowledgments
-
-- [Open Trivia Database](https://opentdb.com/) for providing the quiz API
-- [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework
-- Course instructors and mentors for guidance
+- Project: [QuizMaster](https://github.com/Rayo-Johnson/quiz-app)
 
 ---
 
-**Note:** This project is currently in development. Check back for updates!
+## 🙏 Acknowledgments
+
+- [Open Trivia Database](https://opentdb.com/) - For providing the free quiz API
+- [Tailwind CSS](https://tailwindcss.com/) - For the utility-first CSS framework
+- [Heroicons](https://heroicons.com/) - For the beautiful SVG icons
+- My instructors and mentors for guidance and support
+
+---
+
+## 📬 Contact & Feedback
+
+If you have any questions, suggestions, or feedback, please:
+- Open an issue on GitHub
+- Submit a pull request
+- Contact me through GitHub
+
+---
+
+**⭐ If you found this project helpful, please consider giving it a star!**
+
+---
+
+*Built with ❤️ as a frontend development capstone project*
 
