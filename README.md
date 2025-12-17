@@ -2,7 +2,7 @@
 
 A fully responsive, single-page web application that allows users to test their knowledge across various topics using questions from the Open Trivia Database API.
 
-**Live Demo:** [Add your deployed link here]  
+**Live Demo:** https://rayo-johnson.github.io/quiz-app/
 **Repository:** https://github.com/Rayo-Johnson/quiz-app
 
 ---
