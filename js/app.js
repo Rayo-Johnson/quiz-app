@@ -1,5 +1,5 @@
 // ============================================
-// QuizMaster App - Complete JavaScript
+// QuizMaster App - Complete JavaScript with Time Tracking
 // ============================================
 
 // Global State
@@ -12,7 +12,9 @@ let quizState = {
     questions: [],
     currentQuestionIndex: 0,
     score: 0,
-    answeredQuestions: 0
+    answeredQuestions: 0,
+    startTime: null,
+    completionTime: 0
 };
 
 // API Configuration
@@ -44,34 +46,27 @@ document.addEventListener('DOMContentLoaded', function() {
 // ============================================
 
 function initializeLandingPage() {
-    // Setup difficulty buttons
     const difficultyButtons = document.querySelectorAll('.difficulty-btn');
     difficultyButtons.forEach(button => {
         button.addEventListener('click', handleDifficultyClick);
     });
     
-    // Setup form submission
     const quizForm = document.getElementById('quizForm');
     quizForm.addEventListener('submit', handleFormSubmit);
 }
 
 function handleDifficultyClick(e) {
-    // Remove active class from all buttons
     document.querySelectorAll('.difficulty-btn').forEach(btn => {
         btn.classList.remove('active');
     });
     
-    // Add active class to clicked button
     e.target.classList.add('active');
-    
-    // Update state
     quizState.settings.difficulty = e.target.dataset.difficulty;
 }
 
 async function handleFormSubmit(e) {
     e.preventDefault();
     
-    // Get form values
     const category = document.getElementById('category').value;
     const numQuestions = document.getElementById('numQuestions').value;
     
@@ -80,11 +75,9 @@ async function handleFormSubmit(e) {
         return;
     }
     
-    // Update state
     quizState.settings.category = category;
     quizState.settings.numQuestions = numQuestions;
     
-    // Show loading state
     const startBtn = document.getElementById('startBtn');
     startBtn.innerHTML = `
         <svg class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -95,16 +88,15 @@ async function handleFormSubmit(e) {
     `;
     startBtn.disabled = true;
     
-    // Fetch quiz questions from API
     try {
         await fetchQuizQuestions();
+        quizState.startTime = Date.now();
         initializeQuizScreen();
         switchScreen('quizScreen');
     } catch (error) {
         console.error('Error fetching quiz:', error);
         alert('Failed to load quiz questions. Please try again!');
         
-        // Reset button
         startBtn.innerHTML = `
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
@@ -122,12 +114,10 @@ async function handleFormSubmit(e) {
 async function fetchQuizQuestions() {
     const { category, difficulty, numQuestions } = quizState.settings;
     
-    // Build API URL
     const url = `${API_BASE_URL}?amount=${numQuestions}&category=${category}&difficulty=${difficulty}&type=multiple`;
     
     console.log('Fetching questions from:', url);
     
-    // Fetch from API
     const response = await fetch(url);
     const data = await response.json();
     
@@ -135,7 +125,6 @@ async function fetchQuizQuestions() {
         throw new Error('Failed to fetch questions');
     }
     
-    // Process questions
     quizState.questions = data.results.map(q => ({
         question: decodeHTML(q.question),
         correctAnswer: decodeHTML(q.correct_answer),
@@ -149,14 +138,12 @@ async function fetchQuizQuestions() {
     console.log('Questions loaded:', quizState.questions.length);
 }
 
-// Decode HTML entities (like &quot; to ")
 function decodeHTML(html) {
     const txt = document.createElement('textarea');
     txt.innerHTML = html;
     return txt.value;
 }
 
-// Shuffle array (Fisher-Yates algorithm)
 function shuffleArray(array) {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
@@ -171,17 +158,14 @@ function shuffleArray(array) {
 // ============================================
 
 function initializeQuizScreen() {
-    // Reset state
     quizState.currentQuestionIndex = 0;
     quizState.score = 0;
     quizState.answeredQuestions = 0;
     
-    // Update header info
     document.getElementById('totalQuestions').textContent = quizState.settings.numQuestions;
     document.getElementById('quizCategory').textContent = CATEGORIES[quizState.settings.category];
     document.getElementById('quizDifficulty').textContent = capitalizeFirst(quizState.settings.difficulty);
     
-    // Setup exit button
     document.getElementById('exitBtn').addEventListener('click', function() {
         if (confirm('Are you sure you want to exit? Your progress will be lost.')) {
             resetQuiz();
@@ -189,28 +173,22 @@ function initializeQuizScreen() {
         }
     });
     
-    // Load first question
     loadQuestion();
 }
 
 function loadQuestion() {
     const question = quizState.questions[quizState.currentQuestionIndex];
     
-    // Update question number
     document.getElementById('currentQuestion').textContent = quizState.currentQuestionIndex + 1;
     
-    // Update progress bar
     const progress = ((quizState.currentQuestionIndex) / quizState.settings.numQuestions) * 100;
     document.getElementById('progressBar').style.width = `${progress}%`;
     
-    // Update question text
     document.getElementById('questionText').textContent = question.question;
     
-    // Update score display
     document.getElementById('currentScore').textContent = quizState.score;
     document.getElementById('questionsAnswered').textContent = quizState.answeredQuestions;
     
-    // Render answer options
     const answerContainer = document.getElementById('answerOptions');
     answerContainer.innerHTML = '';
     
@@ -233,14 +211,12 @@ function handleAnswerClick(selectedAnswer, button) {
     const question = quizState.questions[quizState.currentQuestionIndex];
     const isCorrect = selectedAnswer === question.correctAnswer;
     
-    // Update score
     quizState.answeredQuestions++;
     if (isCorrect) {
         quizState.score++;
         button.classList.add('correct');
     } else {
         button.classList.add('incorrect');
-        // Highlight correct answer
         const buttons = document.querySelectorAll('.answer-btn');
         buttons.forEach(btn => {
             if (btn.textContent.includes(question.correctAnswer)) {
@@ -249,23 +225,22 @@ function handleAnswerClick(selectedAnswer, button) {
         });
     }
     
-    // Disable all buttons
     document.querySelectorAll('.answer-btn').forEach(btn => {
         btn.disabled = true;
         btn.style.cursor = 'not-allowed';
     });
     
-    // Update score display
     document.getElementById('currentScore').textContent = quizState.score;
     document.getElementById('questionsAnswered').textContent = quizState.answeredQuestions;
     
-    // Move to next question or show results
     setTimeout(() => {
         quizState.currentQuestionIndex++;
         
         if (quizState.currentQuestionIndex < quizState.questions.length) {
             loadQuestion();
         } else {
+            const endTime = Date.now();
+            quizState.completionTime = Math.floor((endTime - quizState.startTime) / 1000);
             showResults();
         }
     }, 1500);
@@ -276,17 +251,15 @@ function handleAnswerClick(selectedAnswer, button) {
 // ============================================
 
 function showResults() {
-    const { score, answeredQuestions } = quizState;
+    const { score, answeredQuestions, completionTime, settings } = quizState;
     const percentage = Math.round((score / answeredQuestions) * 100);
     
-    // Update score displays
     document.getElementById('finalScore').textContent = `${score}/${answeredQuestions}`;
     document.getElementById('finalPercentage').textContent = `${percentage}% Correct`;
     document.getElementById('correctCount').textContent = score;
     document.getElementById('incorrectCount').textContent = answeredQuestions - score;
     document.getElementById('totalCount').textContent = answeredQuestions;
     
-    // Update message based on score
     const messageEl = document.getElementById('scoreMessage');
     if (percentage >= 80) {
         messageEl.textContent = 'Excellent! 🎉';
@@ -302,7 +275,28 @@ function showResults() {
         messageEl.className = 'inline-block px-4 py-2 bg-red-100 text-red-700 rounded-full font-semibold';
     }
     
-    // Setup buttons
+    const recordKey = `bestTime_${settings.difficulty}`;
+    const currentBest = localStorage.getItem(recordKey);
+    let isNewRecord = false;
+    
+    if (!currentBest || completionTime < parseInt(currentBest)) {
+        localStorage.setItem(recordKey, completionTime.toString());
+        isNewRecord = true;
+    }
+    
+    const timeDisplay = document.getElementById('timeDisplay');
+    timeDisplay.innerHTML = `
+        <div style="margin-top: 20px; font-size: 16px; color: #6b7280;">
+            <div style="margin-bottom: 8px;">
+                <strong style="color: #374151;">Completion Time:</strong> ${formatTime(completionTime)}
+            </div>
+            ${isNewRecord ? 
+                '<div style="margin-top: 12px; padding: 8px 16px; background: #fef3c7; color: #92400e; border-radius: 9999px; font-weight: 600; font-size: 14px; display: inline-block;">🏆 New Personal Record!</div>' :
+                (currentBest ? `<div style="font-size: 14px;">Personal Best (${capitalizeFirst(settings.difficulty)}): ${formatTime(parseInt(currentBest))}</div>` : '')
+            }
+        </div>
+    `;
+    
     document.getElementById('retryBtn').addEventListener('click', function() {
         resetQuiz();
         switchScreen('landingScreen');
@@ -313,8 +307,14 @@ function showResults() {
         switchScreen('landingScreen');
     });
     
-    // Switch to results screen
     switchScreen('resultsScreen');
+}
+
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    if (mins === 0) return `${secs}s`;
+    return `${mins}m ${secs}s`;
 }
 
 // ============================================
@@ -322,15 +322,11 @@ function showResults() {
 // ============================================
 
 function switchScreen(screenId) {
-    // Hide all screens
     document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
     });
     
-    // Show selected screen
     document.getElementById(screenId).classList.add('active');
-    
-    // Scroll to top
     window.scrollTo(0, 0);
 }
 
@@ -344,17 +340,17 @@ function resetQuiz() {
         questions: [],
         currentQuestionIndex: 0,
         score: 0,
-        answeredQuestions: 0
+        answeredQuestions: 0,
+        startTime: null,
+        completionTime: 0
     };
     
-    // Reset form
     document.getElementById('quizForm').reset();
     document.querySelectorAll('.difficulty-btn').forEach(btn => {
         btn.classList.remove('active');
     });
     document.querySelector('[data-difficulty="easy"]').classList.add('active');
     
-    // Reset start button
     const startBtn = document.getElementById('startBtn');
     startBtn.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
@@ -377,5 +373,4 @@ window.addEventListener('error', function(e) {
     console.error('An error occurred:', e.error);
 });
 
-// Log when app is ready
 console.log('QuizMaster app loaded successfully!');
